@@ -6,6 +6,7 @@ import lombok.Data;
 import wcs.auth.config.AuthProvider;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 
 @Entity
@@ -21,6 +22,7 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    @Email
     @Column(nullable = false)
     private String email;
 
