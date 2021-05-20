@@ -1,5 +1,7 @@
 package wcs.auth.security.oauth2;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -61,6 +63,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         String token = tokenProvider.createToken(authentication);
+
+        System.out.println("토큰이 제대로 됐는가??");
+        Claims claims = Jwts.parser()
+                .setSigningKey(appProperties.getAuth().getTokenSecret())
+                .parseClaimsJws(token)
+                .getBody();
+        System.out.println(claims.getSubject());
+        System.out.println(claims.get("email"));
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
